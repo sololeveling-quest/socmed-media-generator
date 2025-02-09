@@ -143,7 +143,7 @@ export async function POST(req: NextRequest) {
     console.log('API route: Generating image')
     const fonts = await (async () => {
       try {
-        const baseUrl = 'http://localhost:3000'
+        const baseUrl = process.env.BASE_API_URL ?? 'http://localhost:3000'
 
         const fontUrl = new URL(
           `${baseUrl}/fonts/${selectedFont.possiblePairs[0].heading}.ttf`,
