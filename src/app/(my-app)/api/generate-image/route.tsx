@@ -21,8 +21,9 @@ const randomColor = () => {
 
 // Helper function to get a random position
 const randomPosition = () => {
-  const positions = ['flex-start', 'center']
-  const selectedPosition = positions[Math.floor(Math.random() * positions.length)]
+  // const positions = ['flex-start', 'center', 'flex-end']
+  // const selectedPosition = positions[Math.floor(Math.random() * positions.length)]
+  const selectedPosition = 'flex-start'
   return {
     justifyContent: selectedPosition,
     alignItems: selectedPosition,
