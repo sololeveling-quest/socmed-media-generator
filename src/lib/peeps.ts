@@ -10,34 +10,39 @@ export const getPaths = ({ folderName, filename }: { folderName: string; filenam
     filename += '.svg'
   }
 
-  const fileContent = fs.readFileSync(
-    path.join(baseDir, `/public/assets/peeps/${folderName}/${filename}`),
-    'utf-8',
-  )
-
-  const root = parse(fileContent)
-  const pathTags = root.querySelectorAll('path')
-
-  if (!pathTags || (pathTags && pathTags.length === 0)) {
-    throw new Error('No path tags found in the file')
-  }
-
-  const jsxPathTags = pathTags.map((tag) => {
-    const attributes = tag.attributes
-    const props = Object.keys(attributes).reduce(
-      (acc, key) => {
-        const newKey =
-          key === 'class' ? 'className' : key.replace(/-([a-z])/g, (g) => g[1].toUpperCase())
-        acc[newKey] = attributes[key]
-        return acc
-      },
-      {} as Record<string, string>,
+  try {
+    const fileContent = fs.readFileSync(
+      path.join(baseDir, `/public/assets/peeps/${folderName}/${filename}`),
+      'utf-8',
     )
 
-    return React.createElement('path', { ...props, key: props.id || Math.random().toString() })
-  })
+    const root = parse(fileContent)
+    const pathTags = root.querySelectorAll('path')
 
-  return jsxPathTags
+    if (!pathTags || (pathTags && pathTags.length === 0)) {
+      throw new Error('No path tags found in the file')
+    }
+
+    const jsxPathTags = pathTags.map((tag) => {
+      const attributes = tag.attributes
+      const props = Object.keys(attributes).reduce(
+        (acc, key) => {
+          const newKey =
+            key === 'class' ? 'className' : key.replace(/-([a-z])/g, (g) => g[1].toUpperCase())
+          acc[newKey] = attributes[key]
+          return acc
+        },
+        {} as Record<string, string>,
+      )
+
+      return React.createElement('path', { ...props, key: props.id || Math.random().toString() })
+    })
+
+    return jsxPathTags
+  } catch (e) {
+    console.error(e)
+  }
+  return null
 }
 
 // getPath({ folderName: 'body', filename: 'Coffee' })
